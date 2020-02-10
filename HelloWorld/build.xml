@@ -70,4 +70,5 @@ ant -f D:\sts-4.3.1.RELEASE\workspace2\build.xml
                   -->
            </sequential>
    </target>
+	<echo>#####DONE ####### </echo> 
 </project>
