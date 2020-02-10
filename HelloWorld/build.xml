@@ -1,0 +1,73 @@
+<project name="build" basedir="." default="main">
+
+<!--
+======================
+to run 
+======================
+set JAVA_HOME=D:\jdk1.8
+set ANT_HOME=D:\IBM10\apache-ant-1.10.7
+set PATH=%PATH%;%ANT_HOME%\bin
+ant -f D:\sts-4.3.1.RELEASE\workspace2\build.xml
+-->
+
+<tstamp>
+     <format property="currentdate" pattern="yyyymmdd" locale="en"/>
+</tstamp>
+<property name="src.dir"   value="."/>
+<property name="build.dir" value="${java.io.tmpdir}CDR_${user.name}" />
+<property name="build.classes.dir" value="${build.dir}${file.separator}classes" />
+<echo message="build started at ${currentdate}" />
+
+   <target name="deleteDir">
+              <delete dir="${dirName}"/>
+   </target>
+
+   <target name="createDir">
+              <mkdir dir="${build.classes.dir}"/>
+   </target>
+
+   <target name="compile" description="compile">
+       	      <echo>Destination Dir : ${build.classes.dir}</echo> 
+              <javac 
+	           srcdir="${src.dir}\${project}" 
+                   destdir="${build.classes.dir}" 
+	           debug="on" 
+                   includeantruntime="false" 
+	           deprecation="true" 
+	           optimize="true" 
+	           failonerror="true" 
+	           fork="true"> 
+              </javac>   
+   </target>
+
+   <target name="buildJar">
+              <echo message="##### buildJar Started for ${jarName} "/>
+              <jar jarfile="${build.dir}${file.separator}${jarName}" basedir="${build.classes.dir}"  duplicate="fail">
+                   <manifest>
+                          <attribute name="Main-Class" value="HelloWorld" />
+                   </manifest>
+              </jar>
+   </target>
+ 
+   <target name="runJar">
+          <java jar="${build.dir}${file.separator}${jarName}" fork="true"  failonerror="true">
+                <classpath>
+                         <pathelement location="${build.dir}${file.separator}${jarName}"/>
+                         <pathelement path="${java.class.path}"/>
+                </classpath>
+          </java>
+   </target>
+ 
+   <target name="main"  description="main">
+           <sequential>
+                  <antcall target="deleteDir"> <param name="dirName" value="${build.dir}"/>  </antcall>
+                  <antcall target="createDir"> <param name="dirName" value="${build.classes.dir}"/>    </antcall>
+                  <antcall target="compile">  <param name="project" value="${file.separator}src"/>  </antcall>
+                  <antcall target="buildJar"> <param name="jarName" value="HelloWorld.jar"/>  </antcall>
+
+                  <!--
+                  <antcall target="runJar">   <param name="jarName" value="HelloWorld.jar"/>  </antcall>
+                  -->
+           </sequential>
+   </target>
+</project>
