@@ -23,5 +23,10 @@ public class flatMap {
         // printing the list
         System.out.println("List generate by flatMap-"
                 + flatList);
+        //fillter
+        flatList.stream()
+                .filter(num -> num%2 ==0)
+                .forEach(System.out::println);
+
     }
 }
